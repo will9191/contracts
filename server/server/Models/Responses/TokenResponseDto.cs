@@ -1,4 +1,4 @@
-﻿namespace server.Models
+﻿namespace server.Models.Responses
 {
     public class TokenResponseDto
     {

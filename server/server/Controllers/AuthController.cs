@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using server.Entities;
-using server.Models;
+using server.Models.Requests;
+using server.Models.Responses;
 using server.Services;
 
 namespace server.Controllers
@@ -13,22 +13,22 @@ namespace server.Controllers
     {
 
         [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(UserDto request)
+        public async Task<ActionResult<User>> Register([FromBody] UserRequestDto request)
         {
             var user = await authService.RegisterAsync(request);
             if (user == null)
-                return BadRequest("Email already exists.");
+                return Conflict("Email already exists.");
             
             return Ok(user);
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<TokenResponseDto>> Login(UserDto request)
+        public async Task<ActionResult<TokenResponseDto>> Login([FromBody] LoginRequestDto request)
         {
             var response = await authService.LoginAsync(request);
 
             if (response is null)
-                return BadRequest("Invalid email or password.");
+                return  BadRequest("Invalid email or password.");
 
             return Ok(response);
         }
@@ -41,20 +41,6 @@ namespace server.Controllers
                 return Unauthorized("Invalid refresh token.");
 
             return result;
-        }
-
-        [Authorize]
-        [HttpGet]
-        public IActionResult AuthenticatedOnlyEndpoint()
-        {
-            return Ok("You are authenticated.");
-        }
-
-        [Authorize(Roles = "Admin")]
-        [HttpGet("admin-only")]
-        public IActionResult AdminOnlyEndpoint()
-        {
-            return Ok("You are an admin.");
         }
     }
 }

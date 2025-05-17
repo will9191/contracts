@@ -1,5 +1,5 @@
 ﻿using server.Entities;
-using server.Models;
+using server.Models.Responses;
 
 namespace server.Mappers
 {
@@ -16,7 +16,8 @@ namespace server.Mappers
                 Product = c.Product,
                 DueDate = c.DueDate,
                 Value = c.Value,
-                ContractFileId = c.ContractFileId
+                ContractFileId = c.ContractFileId,
+                CreatedAt = c.CreatedAt
             }).ToList();
 
             return contracts;

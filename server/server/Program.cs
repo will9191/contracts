@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using server.Data;
+using server.Mappers;
 using server.Services;
 using server.Services.impl;
 
@@ -21,6 +22,10 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(buil
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IContractService, ContractService>();
 builder.Services.AddScoped<IContractFileService, ContractFileService>();
+builder.Services.AddScoped<IUserContextService, UserContextService>();
+
+builder.Services.AddScoped<ContractMapper>();
+
 // Configuração autenticação JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {

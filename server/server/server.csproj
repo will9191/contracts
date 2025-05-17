@@ -11,22 +11,18 @@
     <Compile Remove="NewFolder2\**" />
     <Compile Remove="NewFolder3\**" />
     <Compile Remove="NewFolder4\**" />
-    <Compile Remove="NewFolder\**" />
     <Content Remove="NewFolder1\**" />
     <Content Remove="NewFolder2\**" />
     <Content Remove="NewFolder3\**" />
     <Content Remove="NewFolder4\**" />
-    <Content Remove="NewFolder\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="NewFolder2\**" />
     <EmbeddedResource Remove="NewFolder3\**" />
     <EmbeddedResource Remove="NewFolder4\**" />
-    <EmbeddedResource Remove="NewFolder\**" />
     <None Remove="NewFolder1\**" />
     <None Remove="NewFolder2\**" />
     <None Remove="NewFolder3\**" />
     <None Remove="NewFolder4\**" />
-    <None Remove="NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +37,10 @@
     </PackageReference>
     <PackageReference Include="Scalar.AspNetCore" Version="2.3.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="uploads\contractfiles\" />
   </ItemGroup>
 
 </Project>

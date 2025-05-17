@@ -7,13 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using server.Data;
 using server.Entities;
-using server.Models;
+using server.Models.Requests;
+using server.Models.Responses;
 
 namespace server.Services.impl
 {
     public class AuthService(AppDbContext context, IConfiguration configuration) : IAuthService
     {
-        public async Task<TokenResponseDto?> LoginAsync(UserDto request)
+        public async Task<TokenResponseDto?> LoginAsync(LoginRequestDto request)
         {
             var user = await context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
 
@@ -30,7 +31,7 @@ namespace server.Services.impl
         }
 
 
-        public async Task<User?> RegisterAsync(UserDto request)
+        public async Task<TokenResponseDto?> RegisterAsync(UserRequestDto request)
         {
             if (await context.Users.AnyAsync(u => u.Email == request.Email))
             {
@@ -45,11 +46,12 @@ namespace server.Services.impl
             user.Name = request.Name;
             user.Email = request.Email;
             user.PasswordHash = hashedPassword;
+            user.Role = request.Role;
 
             context.Users.Add(user);
             await context.SaveChangesAsync();
 
-            return user;
+            return await CreateTokenResponseDto(user);
         }
 
         private string CreateToken(User user)

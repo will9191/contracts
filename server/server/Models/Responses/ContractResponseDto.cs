@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace server.Models
+﻿namespace server.Models.Responses
 {
     public class ContractResponseDto
     {
@@ -13,5 +10,6 @@ namespace server.Models
         public DateTime DueDate { get; set; }
         public double Value { get; set; }
         public Guid ContractFileId { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

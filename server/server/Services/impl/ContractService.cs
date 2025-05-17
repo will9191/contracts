@@ -1,20 +1,18 @@
 ﻿using System.Globalization;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
 using server.Entities;
 using server.Mappers;
-using server.Models;
+using server.Models.Responses;
 
 namespace server.Services.impl
 {
     public class ContractService(AppDbContext context, IContractFileService contractFileService, ContractMapper contractMapper) : IContractService
     {
-      
-
-        public async Task<List<ContractResponseDto>> saveContractsFromFile(IFormFile file, Guid userId)
+        public async Task<List<ContractResponseDto>> SaveContractsFromFile(IFormFile file, Guid userId)
         {
-            var contractFileId = await contractFileService.saveFile(file, userId);
+            var contractFileId = await contractFileService.SaveFile(file, userId);
 
             var newContracts = new List<Contract>();
 
@@ -43,7 +41,8 @@ namespace server.Services.impl
                     Product = parts[3],
                     DueDate = DateTime.Parse(parts[4], new CultureInfo("pt-br")),
                     Value = double.Parse(parts[5], CultureInfo.InvariantCulture),
-                    ContractFileId = contractFileId
+                    ContractFileId = contractFileId,
+                    CreatedAt = DateTime.UtcNow
                 });    
             }
 
@@ -55,11 +54,53 @@ namespace server.Services.impl
             return contractMapper.EntitiesToDtoList(newContracts);
         }
 
-        public async Task<List<ContractResponseDto>> getAll()
+        public async Task<List<ContractResponseDto>> GetContracts(int pageNumber, int pageSize)
         {
-              List<Contract> contractsEntities = await context.Contracts.ToListAsync();
+            List<Contract> contractsEntities = await context.Contracts
+                .OrderByDescending(c => c.CreatedAt)
+                .Skip((pageNumber - 1 < 0 ? 0 : pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
             return contractMapper.EntitiesToDtoList(contractsEntities);
+        }
+
+        public async Task<ContractSummaryResponseDto> GetContractsSummaryByCPF(string CPF)
+        {
+            List<Contract> contracts = await context.Contracts
+                .Where(c => c.CPF == CPF)
+                .OrderByDescending(c => c.CreatedAt)
+                .ToListAsync();
+
+            if (contracts is null) 
+                return null;
+
+            var contractsDetails = contracts.Select(c => new ContractDetailsResponseDto
+            {
+                ContractNumber = c.ContractNumber,
+                Product = c.Product,
+                DueDate = c.DueDate,
+                Value = c.Value
+            }).ToList();
+
+            var totalValue = contracts.Sum(c => c.Value);
+
+            var today = DateTime.UtcNow.Date;
+
+            var maxDelayDays = contracts
+                .Where(c => c.DueDate.Date < today)
+                .Select(c => (today - c.DueDate.Date).Days)
+                .DefaultIfEmpty(0)
+                .Max();
+
+            return new ContractSummaryResponseDto
+            {
+                Name = contracts.FirstOrDefault()?.Name ?? string.Empty,
+                CPF = CPF,
+                Contracts = contractsDetails,
+                TotalValue = totalValue,
+                MaxDelayDays = maxDelayDays
+            };
         }
     }
 }

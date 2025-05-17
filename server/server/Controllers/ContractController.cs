@@ -1,42 +1,51 @@
-﻿using System.Globalization;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OfficeOpenXml;
-using server.Entities;
-using server.Models;
+using server.Models.Responses;
 using server.Services;
 
 namespace server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ContractController(IContractService contractService, ILogger<ContractController> _logger) : ControllerBase
+    public class ContractController(IContractService contractService, IUserContextService userContextService) : ControllerBase
     {
-        [HttpPost]
+        [HttpPost("add-from-file")]
         public async Task<ActionResult<List<ContractResponseDto>>> ImportContract(IFormFile file)
         {
-            var userIdStr= User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            Guid userId = userContextService.GetUserId(User);
 
-            if (userIdStr == null)
-                throw new Exception("Usuário não autenticado.");
+            var contracts = await contractService.SaveContractsFromFile(file, userId);
 
-            Guid userId = Guid.Parse(userIdStr);
-
-            // Log do Id extraído do usuário
-            _logger.LogInformation("UserId extraído do token: {UserId}", userId);
-
-            var contracts = await contractService.saveContractsFromFile(file, userId);
-
-            return contracts;
+            return Ok(contracts);
         }
        
 
 
-        [HttpGet]
-        public ActionResult Get()
+        [HttpGet("get-all-paginated")]
+        [Authorize(Roles ="Admin")]
+        public async Task<ActionResult<List<ContractResponseDto>>> GetContractsPaginated(int pageNumber = 1, int pageSize = 10)
         {
-            return contractService.
+            if (pageNumber <= 0)
+                return BadRequest("Page Number must be greater than 0.");
+
+            var contracts = await contractService.GetContracts(pageNumber, pageSize);
+
+            return Ok(contracts);
+        }
+
+        [HttpGet("summary-by-cpf")]
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<ActionResult<ContractSummaryResponseDto>> GetContractsByCPF(string CPF)
+        {
+
+            var summary = await contractService.GetContractsSummaryByCPF(CPF);
+
+            if (summary is null)
+            {
+                return NotFound("No contracts found for this CPF.");
+            }
+
+            return Ok(summary);
         }
     }
 }
