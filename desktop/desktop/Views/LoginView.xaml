@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="desktop.Views.LoginView"
+             Title="Entrar">
+    <ScrollView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackLayout Grid.Row="0" Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                <Image VerticalOptions="Center" HorizontalOptions="Center" Source="concilig_full_logo.png" MaximumWidthRequest="200"/>
+                <Label VerticalOptions="Center" HorizontalOptions="Center" Text="Bem-vindo de volta!" FontFamily="Sora" FontAttributes="Bold"/>
+            </StackLayout>
+
+            <StackLayout Grid.Row="1" Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                <StackLayout WidthRequest="320">
+                    <Entry Keyboard="Text" Placeholder="Email" x:Name="Email"/>
+                </StackLayout>
+                <StackLayout WidthRequest="320">
+                    <Entry Keyboard="Password" Placeholder="Password" x:Name="Password"/>
+                </StackLayout>
+            </StackLayout>
+
+            <StackLayout Grid.Row="2" WidthRequest="320">
+                <Button Text="Entrar" Clicked="Login"/>
+            </StackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>
