@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="desktop.Views.ContractFilesView"
+             Title="ContractFilesView">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
+            <ActivityIndicator x:Name="LoadingIndicator" IsRunning="True" IsVisible="True" HorizontalOptions="Center" />
+
+            <CollectionView x:Name="FilesList"
+                        IsVisible="False"
+                        EmptyView="Nenhum arquivo importado encontrado."
+                        SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="10" Margin="5" CornerRadius="10" BorderColor="LightGray">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding FileName}" FontSize="18" FontAttributes="Bold" />
+                                <Label Text="{Binding FilePath}" FontSize="14" TextColor="Gray" />
+                                <Label Text="{Binding UploadedAt, StringFormat='Enviado em: {0:dd/MM/yyyy HH:mm}'}" FontSize="14" />
+                                <Label Text="Usuário:" FontAttributes="Bold" FontSize="14" />
+                                <Label Text="{Binding UploadedBy.Name}" FontSize="14" />
+                                <Label Text="{Binding UploadedBy.Email}" FontSize="14" />
+                                <Label Text="{Binding UploadedBy.Role}" FontSize="14" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
+                <Button Text="Anterior" Clicked="OnPreviousPageClicked"/>
+                <Label x:Name="PageLabel" VerticalOptions="Center"/>
+                <Button Text="Próxima" Clicked="OnNextPageClicked"/>
+            </StackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

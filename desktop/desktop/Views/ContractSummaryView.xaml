@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="desktop.Views.ContractSummaryView"
+             Title="ContractSummaryView">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
+            <Label Text="{Binding Name}" FontSize="20" FontAttributes="Bold"/>
+            <Label Text="{Binding CPF}" FontSize="16"/>
+            <Label Text="{Binding TotalValue, StringFormat='Total: R$ {0:F2}'}" FontSize="16"/>
+            <Label Text="{Binding MaxDelayDays, StringFormat='Máx. dias em atraso: {0}'}" FontSize="16"/>
+            <Label Text="Contratos:" FontSize="18" FontAttributes="Bold" Margin="0,10,0,0"/>
+            <CollectionView ItemsSource="{Binding Contracts}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="10" Margin="5" CornerRadius="10" BorderColor="LightGray">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding ContractNumber}" FontSize="16"/>
+                                <Label Text="{Binding Product}" FontSize="14"/>
+                                <Label Text="{Binding DueDate, StringFormat='Vencimento: {0:dd/MM/yyyy}'}" FontSize="14"/>
+                                <Label Text="{Binding Value, StringFormat='R$ {0:F2}'}" FontSize="14"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Button Text="Fechar" Clicked="OnCloseClicked"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

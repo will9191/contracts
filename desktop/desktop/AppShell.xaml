@@ -5,11 +5,20 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:desktop"
     xmlns:views="clr-namespace:desktop.Views"
-    Title="Concilig App">
+    Title="Concilig App"
+    FlyoutBehavior="Flyout">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate views:MainPage}"
-        Route="main" />
+    <FlyoutItem Title="Início" Route="main" Icon="home.png">
+        <ShellContent ContentTemplate="{DataTemplate views:MainPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Contratos" Route="contracts" Icon="contracts.png">
+        <ShellContent ContentTemplate="{DataTemplate views:ContractsView}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Arquivos Importados" Route="imported-files" Icon="files.png">
+        <ShellContent ContentTemplate="{DataTemplate views:ContractFilesView}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Sair" Icon="logout.png">
+        <ShellContent ContentTemplate="{DataTemplate views:LoginView}" />
+    </FlyoutItem>
 
 </Shell>

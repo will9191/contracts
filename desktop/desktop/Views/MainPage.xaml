@@ -2,7 +2,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="desktop.Views.MainPage"
-             
              >
     <VerticalStackLayout Spacing="25" VerticalOptions="Center">
         <Image Source="concilig_full_logo.png" WidthRequest="250"/>
