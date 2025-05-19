@@ -35,10 +35,10 @@ namespace server.Controllers
 
         [HttpGet("summary-by-cpf")]
         [Authorize(Roles = "Admin, Manager")]
-        public async Task<ActionResult<ContractSummaryResponseDto>> GetContractsByCPF(string CPF)
+        public async Task<ActionResult<ContractSummaryResponseDto>> GetContractsByCPF(string cpf)
         {
 
-            var summary = await contractService.GetContractsSummaryByCPF(CPF);
+            var summary = await contractService.GetContractsSummaryByCPF(cpf);
 
             if (summary is null)
             {

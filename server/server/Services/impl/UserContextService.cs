@@ -6,12 +6,18 @@ namespace server.Services.impl
     {
         public Guid GetUserId(ClaimsPrincipal user)
         {
-            var userIdStr = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userIdStr = user.Claims.FirstOrDefault(c =>
+                c.Type == ClaimTypes.NameIdentifier ||
+                c.Type == "sub" ||
+                c.Type == "userId")?.Value;
 
-            if (userIdStr == null)
+            if (string.IsNullOrEmpty(userIdStr))
                 throw new Exception("Usuário não autenticado.");
 
-            return Guid.Parse(userIdStr);
+            if (!Guid.TryParse(userIdStr, out var userId))
+                throw new Exception("O claim de identificação do usuário não é um GUID válido.");
+
+            return userId;
         }
     }
 }
