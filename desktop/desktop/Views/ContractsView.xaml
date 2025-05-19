@@ -6,10 +6,7 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="10">
             <ActivityIndicator x:Name="LoadingIndicator" IsRunning="True" IsVisible="True" HorizontalOptions="Center" />
-
             
-            <Button Text="Ínício" Style="{StaticResource OutlineButton}" Clicked="OnSearchByCpfClicked" Margin="0, 25, 0, 0"/>
-
             <Button Text="Adicionar novos contratos por arquivo" Clicked="OnUploadFileClicked" Margin="0,5,0,0"/>
 
             <Button Text="Consultar por CPF" Clicked="OnSearchByCpfClicked" Margin="0, 5, 0, 0"/>
